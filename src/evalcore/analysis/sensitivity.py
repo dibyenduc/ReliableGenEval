@@ -101,12 +101,18 @@ def run_sensitivity_analysis(
 
     return pd.DataFrame([vars(r) for r in rows])
 
-
 def summarize_sensitivity(df: pd.DataFrame, full_sample_estimate: float, ci_level: float = 0.95) -> pd.DataFrame:
-    """Aggregate per-trial results into per-sample-size summary statistics."""
+    """Aggregate per-trial results into per-sample-size summary statistics.
+
+    Includes coverage_se: the standard error of the empirical coverage
+    estimate (binomial SE), so callers can judge whether an observed
+    coverage gap from the nominal CI level is statistically meaningful
+    or just noise from a limited number of trials.
+    """
     summary = (
         df.groupby("sample_size")
         .agg(
+            n_trials=("trial", "count"),
             mean_ci_width=("ci_width", "mean"),
             std_ci_width=("ci_width", "std"),
             empirical_coverage=("contains_full_sample_estimate", "mean"),
@@ -117,6 +123,9 @@ def summarize_sensitivity(df: pd.DataFrame, full_sample_estimate: float, ci_leve
         )
         .reset_index()
     )
+    p = summary["empirical_coverage"]
+    n = summary["n_trials"]
+    summary["coverage_se"] = np.sqrt(p * (1 - p) / n)
     summary["nominal_ci_level"] = ci_level
     summary["full_sample_estimate"] = full_sample_estimate
     return summary

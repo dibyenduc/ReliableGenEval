@@ -47,8 +47,10 @@ def test_summarize_produces_one_row_per_sample_size(synthetic_paired_data):
     full_est = float(np.asarray(a).mean() - np.asarray(b).mean())
     summary = summarize_sensitivity(df, full_sample_estimate=full_est)
     assert len(summary) == 3
-    assert set(summary.columns) >= {"sample_size", "mean_ci_width", "empirical_coverage", "fraction_significant"}
-
+    assert set(summary.columns) >= {
+        "sample_size", "mean_ci_width", "empirical_coverage", "fraction_significant", "coverage_se", "n_trials"
+    }
+    assert (summary["coverage_se"] >= 0).all()
 
 def test_coverage_is_between_zero_and_one(synthetic_paired_data):
     a, b, doc_ids = synthetic_paired_data
