@@ -1,0 +1,26 @@
+[project]
+name = "evalcore"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "datasets>=5.0.1",
+    "numpy>=2.4.6",
+    "pandas>=3.0.5",
+    "pydantic>=2.13.5",
+    "pytest>=9.1.1",
+    "scipy>=1.17.1",
+]
+
+[project.scripts]
+evalcore = "evalcore:main"
+
+[build-system]
+requires = ["uv_build>=0.11.29,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+markers = ["network: tests that require internet access (deselected by default)"]
+addopts = "-m 'not network'"
+
