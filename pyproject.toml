@@ -26,6 +26,7 @@ addopts = "-m 'not network'"
 
 [dependency-groups]
 dev = [
+    "matplotlib>=3.11.2",
     "ruff>=0.16.8",
 ]
 
