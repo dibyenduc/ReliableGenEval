@@ -24,3 +24,8 @@ build-backend = "uv_build"
 markers = ["network: tests that require internet access (deselected by default)"]
 addopts = "-m 'not network'"
 
+[dependency-groups]
+dev = [
+    "ruff>=0.16.8",
+]
+

@@ -61,7 +61,7 @@ class ValidationReport:
     errors: list[str]
 
 
-def load_summeval_raw() -> "pd.DataFrame":
+def load_summeval_raw() -> pd.DataFrame:
     """Load the raw (wide-format) SummEval dataset from the HF mirror."""
     from datasets import load_dataset
 
