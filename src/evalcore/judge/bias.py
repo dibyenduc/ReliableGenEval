@@ -163,6 +163,9 @@ def combine_three_verdicts(v1: str | None, v2: str | None, v3: str | None) -> tu
         return top_winner, unanimous
     return "tie", False  # no majority -> inconclusive
 
+import random
+
+
 def run_debiased_pairwise_judge(
     article: str,
     summary_1: str,
@@ -170,11 +173,15 @@ def run_debiased_pairwise_judge(
     dimension: str,
     model: str = "llama3.1:latest",
     use_tiebreak: bool = True,
+    rng_seed: int | None = None,
 ) -> DebiasedVerdict:
     """Get a position-debiased verdict by running the pairwise judge in
     both presentation orders and requiring agreement. If the two orders
-    disagree and use_tiebreak=True, runs a third call (original order
-    again) and takes a majority vote across all three.
+    disagree and use_tiebreak=True, makes a THIRD call with a randomly
+    chosen presentation order (not a repeat of either prior order) and
+    takes a majority vote across all three. Randomizing the tie-break
+    order is essential -- reusing either prior order re-injects the same
+    positional bias into the vote instead of resolving it.
     """
     prompt_original = build_pairwise_prompt(article, summary_1, summary_2, dimension)
     verdict_original = parse_pairwise_verdict(call_ollama(prompt_original, model=model))
@@ -193,11 +200,22 @@ def run_debiased_pairwise_judge(
         )
         return DebiasedVerdict(winner=combined, agreement=agreement, n_calls=2, note=note)
 
-    verdict_tiebreak = parse_pairwise_verdict(call_ollama(prompt_original, model=model))
-    winner_tiebreak = resolve_pairwise_winner(verdict_tiebreak.winner, ("summary_1", "summary_2"))
+    rng = random.Random(rng_seed)
+    show_1_first = rng.random() < 0.5
+    if show_1_first:
+        prompt_tiebreak = prompt_original
+        tiebreak_order = ("summary_1", "summary_2")
+    else:
+        prompt_tiebreak = prompt_swapped
+        tiebreak_order = ("summary_2", "summary_1")
+
+    verdict_tiebreak = parse_pairwise_verdict(call_ollama(prompt_tiebreak, model=model))
+    winner_tiebreak = resolve_pairwise_winner(verdict_tiebreak.winner, tiebreak_order)
+
     final, unanimous = combine_three_verdicts(winner_original, winner_swapped, winner_tiebreak)
     note = (
-        f"orders disagreed ({winner_original} vs {winner_swapped}); tie-break majority: '{final}'"
+        f"orders disagreed ({winner_original} vs {winner_swapped}); "
+        f"random tie-break ({'orig' if show_1_first else 'swapped'} order): '{final}'"
         f"{' (unanimous)' if unanimous else ''}"
     )
     return DebiasedVerdict(winner=final, agreement=unanimous, n_calls=3, note=note)
