@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ReliableGenEval -- Scale Demo with Calibration-Driven Escalation</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 40px; background: #f7f8fa; color: #1a1a2e; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .subtitle { color: #666; margin-bottom: 32px; font-size: 13px; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 32px; }
+  .kpi { background: white; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .kpi .value { font-size: 28px; font-weight: 700; }
+  .kpi .label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+  .kpi.good .value { color: #16a34a; }
+  .kpi.warn .value { color: #d97706; }
+  section { background: white; border-radius: 8px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  section h2 { font-size: 15px; margin-top: 0; margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #eee; }
+  th { color: #666; font-weight: 600; }
+  .latency-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .latency-cell { text-align: center; padding: 12px; background: #f0f2f5; border-radius: 6px; }
+  .latency-cell .val { font-size: 20px; font-weight: 700; }
+  .latency-cell .lbl { font-size: 11px; color: #666; }
+  .throughput-chart { display: flex; align-items: flex-end; height: 100px; gap: 3px; }
+  .bar { flex: 1; background: #4f46e5; border-radius: 2px 2px 0 0; min-height: 2px; }
+  code { background: #f0f2f5; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+</style>
+</head>
+<body>
+  <h1>ReliableGenEval -- Scale Demo with Calibration-Driven Escalation</h1>
+  <p class="subtitle">2000 events &middot; backend: mock_cloud &middot; model: mock-cloud-large-v1 &middot; duration: 2.9s</p>
+
+  <div class="kpi-grid">
+    <div class="kpi good"><div class="value">2,000</div><div class="label">Total Calls</div></div>
+    <div class="kpi good"><div class="value">684/s</div><div class="label">Throughput</div></div>
+    <div class="kpi good"><div class="value">100.0%</div><div class="label">Parse Success</div></div>
+    <div class="kpi warn"><div class="value">2.4%</div><div class="label">Needed Retry</div></div>
+    <div class="kpi warn"><div class="value">0.0%</div><div class="label">Failed (post-retry)</div></div>
+  </div>
+
+  <section>
+    <h2>Latency Distribution</h2>
+    <div class="latency-grid">
+      <div class="latency-cell"><div class="val">309ms</div><div class="lbl">p50</div></div>
+      <div class="latency-cell"><div class="val">505ms</div><div class="lbl">p90</div></div>
+      <div class="latency-cell"><div class="val">567ms</div><div class="lbl">p95</div></div>
+      <div class="latency-cell"><div class="val">745ms</div><div class="lbl">p99</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Throughput Over Time (500 escalated to human review)</h2>
+    <div class="throughput-chart"><div class="bar" style="height:100%" title="232 calls"></div><div class="bar" style="height:28%" title="65 calls"></div><div class="bar" style="height:45%" title="104 calls"></div><div class="bar" style="height:41%" title="94 calls"></div><div class="bar" style="height:41%" title="95 calls"></div><div class="bar" style="height:42%" title="97 calls"></div><div class="bar" style="height:44%" title="102 calls"></div><div class="bar" style="height:34%" title="80 calls"></div><div class="bar" style="height:43%" title="100 calls"></div><div class="bar" style="height:38%" title="89 calls"></div><div class="bar" style="height:43%" title="99 calls"></div><div class="bar" style="height:41%" title="95 calls"></div><div class="bar" style="height:40%" title="92 calls"></div><div class="bar" style="height:38%" title="89 calls"></div><div class="bar" style="height:44%" title="103 calls"></div><div class="bar" style="height:39%" title="90 calls"></div><div class="bar" style="height:43%" title="100 calls"></div><div class="bar" style="height:42%" title="97 calls"></div><div class="bar" style="height:43%" title="99 calls"></div><div class="bar" style="height:34%" title="78 calls"></div></div>
+  </section>
+
+  <section>
+    <h2>Breakdown by Dimension</h2>
+    <table>
+      <tr><th>Dimension</th><th>Calls</th><th>Parse OK</th><th>Escalated</th><th>Avg Latency</th></tr>
+      <tr><td>coherence</td><td>500</td><td>100.0%</td><td>0.0%</td><td>314 ms</td></tr><tr><td>consistency</td><td>500</td><td>100.0%</td><td>0.0%</td><td>316 ms</td></tr><tr><td>fluency</td><td>500</td><td>100.0%</td><td>100.0%</td><td>319 ms</td></tr><tr><td>relevance</td><td>500</td><td>100.0%</td><td>0.0%</td><td>300 ms</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Retries &amp; Errors</h2>
+    <table>
+      <tr><th>Item ID</th><th>Dimension</th><th>Retry Count</th><th>Error</th></tr>
+      <tr><td>cnn-test-c05bda9b387ec8ae43803170b6f59b4b82505db9::7</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-d680ebcdcd59fd5ee9b602a06bcd5230c212835b::8</td><td>fluency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-2abe0f81f5b22c8a406165717e3bd7fce6fe47c6::2</td><td>consistency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-18243373494a1722ddcd162ec67b63dd749633ab::0</td><td>consistency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-f37fd6e9b6cc18a7132568e307ef3b130931e809::8</td><td>fluency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-130ff8f2dfb6ab67861d5924b0ff5acd63c7d8ce::3</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-096e418a953af86df0d1560bec95bc7bfee2e34b::3</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-051db270afc32571a08c15124330efe89d80fea8::11</td><td>consistency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-155754e1f2bc83f6836af78703edd4d00f19f381::12</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-130ff8f2dfb6ab67861d5924b0ff5acd63c7d8ce::8</td><td>relevance</td><td>1</td><td>&mdash;</td></tr><tr><td>cnn-test-e49792c337d3f4c13e22f710efa44cf6a4e59aba::8</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-9b5a04b9879fe716a2dcd66dd331f99534603c16::10</td><td>consistency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-23e8c1d71474d239aa9ae37b9a05031b0054b8ce::4</td><td>relevance</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-2cf8c2d1d2ceb1980249f77e703f9039e63799d0::1</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-d89de9c2a76f2665560becfe5d761a4fc62b9926::13</td><td>fluency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-4f3b35b540ba05f0f82d71a694ec23dde4dc3e01::0</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-14c813567696f4e63a39993c09d4edb454036179::9</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-d89de9c2a76f2665560becfe5d761a4fc62b9926::4</td><td>relevance</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-2cf8c2d1d2ceb1980249f77e703f9039e63799d0::15</td><td>fluency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-2c37d44d03ce2e91310339d884d33ee5aabf9abc::1</td><td>relevance</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-14c813567696f4e63a39993c09d4edb454036179::1</td><td>fluency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-b255397ee863bd8faf9def57c0f76769153d905e::1</td><td>fluency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-d296270ab4a4cf20f2d9c1aae7514687806f2b35::6</td><td>consistency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-4001b252a072ac149c70840b22299cc6cfab3bae::0</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-18243373494a1722ddcd162ec67b63dd749633ab::13</td><td>fluency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-9afda3cde191a883d8c166ceb5765eb53205d8f4::8</td><td>relevance</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-8bc8f134bc3ceaeec0df8f29e96e13d319717ab8::15</td><td>fluency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-2a48112ddee712f2364f128076cb2db555a043b1::1</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-8b51a10370a1219137e231192e65b9cd52238ea6::3</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-5be0a9584b051175d9f4842a143b76385335d96a::9</td><td>relevance</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-8847383b72167c3f3dd2161b5b091b580c8f4da7::6</td><td>relevance</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-d89de9c2a76f2665560becfe5d761a4fc62b9926::12</td><td>consistency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-26e4e19d945cedcb489f28808c730658139c9415::10</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-9b1af0f993d78353ebd56a1b180e882e751527b3::2</td><td>relevance</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-26e4e19d945cedcb489f28808c730658139c9415::14</td><td>relevance</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-f26d8400ae49b90d109c165d0f44b8f6ca253c08::4</td><td>relevance</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-f37fd6e9b6cc18a7132568e307ef3b130931e809::0</td><td>fluency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-0f0789390d67698283cc87b2e046b5c5cd77edb7::6</td><td>consistency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-b1f6faac3f406edca1e0cad8cce1319c83e62605::11</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-9b1af0f993d78353ebd56a1b180e882e751527b3::2</td><td>consistency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-2377095dda83df778e34304b7a09813808105d3b::5</td><td>fluency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-3ba3bde4a1440134bb38ec22ba50db59986b544c::12</td><td>fluency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-4a593dc4c7e0b4d09bfdc66bb315c47b54eb15df::6</td><td>relevance</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-8b51a10370a1219137e231192e65b9cd52238ea6::14</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-f468efac7b3c54f8c42c2c81dff108c52ebe0d7d::13</td><td>fluency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-18243373494a1722ddcd162ec67b63dd749633ab::10</td><td>coherence</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-14c813567696f4e63a39993c09d4edb454036179::11</td><td>fluency</td><td>1</td><td>&mdash;</td></tr><tr><td>dm-test-cf4ba8f94f2dd5604eb8f8a4e655c10cf0996365::9</td><td>coherence</td><td>1</td><td>&mdash;</td></tr>
+    </table>
+  </section>
+</body>
+</html>
