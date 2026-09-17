@@ -1,0 +1,61 @@
+doc_id,dimension,model_a_idx,model_b_idx,winner_original_order,winner_swapped_order,consistent,note
+dm-test-0f0789390d67698283cc87b2e046b5c5cd77edb7,coherence,6,15,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-0f0789390d67698283cc87b2e046b5c5cd77edb7,consistency,6,15,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-0f0789390d67698283cc87b2e046b5c5cd77edb7,fluency,6,15,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-0f0789390d67698283cc87b2e046b5c5cd77edb7,relevance,6,15,summary_1,summary_2,False,"POSITION BIAS DETECTED: preferred 'summary_1' when shown first, 'summary_2' when shown second"
+dm-test-cf4ba8f94f2dd5604eb8f8a4e655c10cf0996365,coherence,11,10,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-cf4ba8f94f2dd5604eb8f8a4e655c10cf0996365,consistency,11,10,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-cf4ba8f94f2dd5604eb8f8a4e655c10cf0996365,fluency,11,10,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-cf4ba8f94f2dd5604eb8f8a4e655c10cf0996365,relevance,11,10,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-5be0a9584b051175d9f4842a143b76385335d96a,coherence,8,14,summary_1,summary_2,False,"POSITION BIAS DETECTED: preferred 'summary_1' when shown first, 'summary_2' when shown second"
+dm-test-5be0a9584b051175d9f4842a143b76385335d96a,consistency,8,14,summary_1,summary_2,False,"POSITION BIAS DETECTED: preferred 'summary_1' when shown first, 'summary_2' when shown second"
+dm-test-5be0a9584b051175d9f4842a143b76385335d96a,fluency,8,14,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-5be0a9584b051175d9f4842a143b76385335d96a,relevance,8,14,summary_1,summary_2,False,"POSITION BIAS DETECTED: preferred 'summary_1' when shown first, 'summary_2' when shown second"
+dm-test-c50d33e9749e7bb484d9b69c4f5fca35a3a50cb5,coherence,15,2,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+dm-test-c50d33e9749e7bb484d9b69c4f5fca35a3a50cb5,consistency,15,2,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-c50d33e9749e7bb484d9b69c4f5fca35a3a50cb5,fluency,15,2,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+dm-test-c50d33e9749e7bb484d9b69c4f5fca35a3a50cb5,relevance,15,2,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+dm-test-b5bc2ae78441e4ac08fb01823d5fc0f1627c3166,coherence,2,3,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+dm-test-b5bc2ae78441e4ac08fb01823d5fc0f1627c3166,consistency,2,3,summary_1,tie,False,"POSITION BIAS DETECTED: preferred 'summary_1' when shown first, 'tie' when shown second"
+dm-test-b5bc2ae78441e4ac08fb01823d5fc0f1627c3166,fluency,2,3,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+dm-test-b5bc2ae78441e4ac08fb01823d5fc0f1627c3166,relevance,2,3,summary_2,summary_2,True,consistent: preferred 'summary_2' regardless of position
+dm-test-6721edf88c95f480a4db2c63649dbb03736aeadf,coherence,10,1,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+dm-test-6721edf88c95f480a4db2c63649dbb03736aeadf,consistency,10,1,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+dm-test-6721edf88c95f480a4db2c63649dbb03736aeadf,fluency,10,1,summary_2,summary_2,True,consistent: preferred 'summary_2' regardless of position
+dm-test-6721edf88c95f480a4db2c63649dbb03736aeadf,relevance,10,1,summary_2,summary_2,True,consistent: preferred 'summary_2' regardless of position
+dm-test-d680ebcdcd59fd5ee9b602a06bcd5230c212835b,coherence,3,6,summary_2,summary_2,True,consistent: preferred 'summary_2' regardless of position
+dm-test-d680ebcdcd59fd5ee9b602a06bcd5230c212835b,consistency,3,6,summary_2,summary_2,True,consistent: preferred 'summary_2' regardless of position
+dm-test-d680ebcdcd59fd5ee9b602a06bcd5230c212835b,fluency,3,6,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+dm-test-d680ebcdcd59fd5ee9b602a06bcd5230c212835b,relevance,3,6,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+dm-test-2377095dda83df778e34304b7a09813808105d3b,coherence,1,14,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-2377095dda83df778e34304b7a09813808105d3b,consistency,1,14,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-2377095dda83df778e34304b7a09813808105d3b,fluency,1,14,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-2377095dda83df778e34304b7a09813808105d3b,relevance,1,14,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-8847383b72167c3f3dd2161b5b091b580c8f4da7,coherence,0,13,summary_2,summary_2,True,consistent: preferred 'summary_2' regardless of position
+dm-test-8847383b72167c3f3dd2161b5b091b580c8f4da7,consistency,0,13,summary_2,summary_2,True,consistent: preferred 'summary_2' regardless of position
+dm-test-8847383b72167c3f3dd2161b5b091b580c8f4da7,fluency,0,13,summary_2,summary_2,True,consistent: preferred 'summary_2' regardless of position
+dm-test-8847383b72167c3f3dd2161b5b091b580c8f4da7,relevance,0,13,summary_2,summary_2,True,consistent: preferred 'summary_2' regardless of position
+cnn-test-b1c3fc03a2b74cf4c79844c1fe2fdce70a8a436e,coherence,0,14,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+cnn-test-b1c3fc03a2b74cf4c79844c1fe2fdce70a8a436e,consistency,0,14,summary_1,summary_2,False,"POSITION BIAS DETECTED: preferred 'summary_1' when shown first, 'summary_2' when shown second"
+cnn-test-b1c3fc03a2b74cf4c79844c1fe2fdce70a8a436e,fluency,0,14,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+cnn-test-b1c3fc03a2b74cf4c79844c1fe2fdce70a8a436e,relevance,0,14,summary_2,summary_2,True,consistent: preferred 'summary_2' regardless of position
+dm-test-9beaaf73e4517d5bf1bc284f386485d571da96cf,coherence,2,13,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+dm-test-9beaaf73e4517d5bf1bc284f386485d571da96cf,consistency,2,13,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+dm-test-9beaaf73e4517d5bf1bc284f386485d571da96cf,fluency,2,13,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-9beaaf73e4517d5bf1bc284f386485d571da96cf,relevance,2,13,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+cnn-test-404f859482d47c127868964a9a39d1a7645dd2e9,coherence,4,15,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+cnn-test-404f859482d47c127868964a9a39d1a7645dd2e9,consistency,4,15,tie,summary_1,False,"POSITION BIAS DETECTED: preferred 'tie' when shown first, 'summary_1' when shown second"
+cnn-test-404f859482d47c127868964a9a39d1a7645dd2e9,fluency,4,15,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+cnn-test-404f859482d47c127868964a9a39d1a7645dd2e9,relevance,4,15,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-207df192edc1836250b69d1bc5b9e6a38206eb78,coherence,15,8,summary_1,summary_2,False,"POSITION BIAS DETECTED: preferred 'summary_1' when shown first, 'summary_2' when shown second"
+dm-test-207df192edc1836250b69d1bc5b9e6a38206eb78,consistency,15,8,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-207df192edc1836250b69d1bc5b9e6a38206eb78,fluency,15,8,summary_1,summary_2,False,"POSITION BIAS DETECTED: preferred 'summary_1' when shown first, 'summary_2' when shown second"
+dm-test-207df192edc1836250b69d1bc5b9e6a38206eb78,relevance,15,8,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-6f027d030f9ca86446dc893f1d10ced4c9a3561f,coherence,3,12,summary_2,summary_1,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'summary_1' when shown second"
+dm-test-6f027d030f9ca86446dc893f1d10ced4c9a3561f,consistency,3,12,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-6f027d030f9ca86446dc893f1d10ced4c9a3561f,fluency,3,12,summary_2,summary_2,True,consistent: preferred 'summary_2' regardless of position
+dm-test-6f027d030f9ca86446dc893f1d10ced4c9a3561f,relevance,3,12,summary_2,tie,False,"POSITION BIAS DETECTED: preferred 'summary_2' when shown first, 'tie' when shown second"
+dm-test-e428e25bbf8e06643154ce31b7c6fab64c81e857,coherence,8,14,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-e428e25bbf8e06643154ce31b7c6fab64c81e857,consistency,8,14,summary_2,summary_2,True,consistent: preferred 'summary_2' regardless of position
+dm-test-e428e25bbf8e06643154ce31b7c6fab64c81e857,fluency,8,14,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
+dm-test-e428e25bbf8e06643154ce31b7c6fab64c81e857,relevance,8,14,summary_1,summary_1,True,consistent: preferred 'summary_1' regardless of position
