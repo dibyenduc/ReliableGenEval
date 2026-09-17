@@ -1,0 +1,5 @@
+dimension,n_comparisons,n_inconsistent,inconsistency_rate,escalate,reason
+coherence,15,8,0.5333333333333333,True,position-inconsistency 53.3% exceeds threshold 20%; pairwise verdicts on this dimension are not reliable without order-debiasing (e.g. majority vote across both orders)
+consistency,15,13,0.8666666666666667,True,position-inconsistency 86.7% exceeds threshold 20%; pairwise verdicts on this dimension are not reliable without order-debiasing (e.g. majority vote across both orders)
+fluency,15,11,0.7333333333333333,True,position-inconsistency 73.3% exceeds threshold 20%; pairwise verdicts on this dimension are not reliable without order-debiasing (e.g. majority vote across both orders)
+relevance,15,8,0.5333333333333333,True,position-inconsistency 53.3% exceeds threshold 20%; pairwise verdicts on this dimension are not reliable without order-debiasing (e.g. majority vote across both orders)

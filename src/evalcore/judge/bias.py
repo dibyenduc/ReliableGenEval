@@ -82,3 +82,43 @@ def run_position_bias_check(
         note=note,
     )
 
+import pandas as pd
+
+POSITION_BIAS_THRESHOLD = 0.2  # escalate a dimension if >20% of comparisons flip with position
+
+
+def summarize_position_bias(results: pd.DataFrame, threshold: float = POSITION_BIAS_THRESHOLD) -> pd.DataFrame:
+    """Aggregate a position-bias study's raw comparisons into a per-dimension
+    verdict: is the pairwise judge reliable enough (on position) to use as-is,
+    or should it be escalated / order-debiased before trusting its output?
+
+    Expects `results` to have columns 'dimension' and 'consistent' (bool),
+    as produced by scripts/run_position_bias_study.py.
+    """
+    rows = []
+    for dimension, group in results.groupby("dimension"):
+        n_comparisons = len(group)
+        n_inconsistent = int((~group["consistent"]).sum())
+        inconsistency_rate = n_inconsistent / n_comparisons if n_comparisons else 0.0
+        escalate = inconsistency_rate > threshold
+        if escalate:
+            reason = (
+                f"position-inconsistency {inconsistency_rate:.1%} exceeds threshold "
+                f"{threshold:.0%}; pairwise verdicts on this dimension are not reliable "
+                f"without order-debiasing (e.g. majority vote across both orders)"
+            )
+        else:
+            reason = (
+                f"position-inconsistency {inconsistency_rate:.1%} is within threshold "
+                f"{threshold:.0%}; pairwise verdicts are usable as-is"
+            )
+        rows.append({
+            "dimension": dimension,
+            "n_comparisons": n_comparisons,
+            "n_inconsistent": n_inconsistent,
+            "inconsistency_rate": inconsistency_rate,
+            "escalate": escalate,
+            "reason": reason,
+        })
+    return pd.DataFrame(rows).sort_values("dimension").reset_index(drop=True)
+
