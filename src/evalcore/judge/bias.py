@@ -51,17 +51,20 @@ def run_position_bias_check(
     summary_2: str,
     dimension: str,
     model: str = "llama3.1:latest",
+    prompt_builder=build_pairwise_prompt,
+    verdict_parser=parse_pairwise_verdict,
 ) -> PositionBiasResult:
-    """Call the pairwise judge twice on the same pair, swapping presentation
-    order, and check whether the preferred summary's identity stays
-    consistent regardless of which slot (A or B) it was shown in.
+    """... (same docstring as before) ...
+    prompt_builder/verdict_parser let this be reused with alternative
+    pairwise prompt designs (e.g. chain-of-thought) without duplicating
+    the order-swap/resolve logic.
     """
-    prompt_original = build_pairwise_prompt(article, summary_1, summary_2, dimension)
-    verdict_original = parse_pairwise_verdict(call_ollama(prompt_original, model=model))
+    prompt_original = prompt_builder(article, summary_1, summary_2, dimension)
+    verdict_original = verdict_parser(call_ollama(prompt_original, model=model))
     winner_original = resolve_pairwise_winner(verdict_original.winner, ("summary_1", "summary_2"))
 
-    prompt_swapped = build_pairwise_prompt(article, summary_2, summary_1, dimension)
-    verdict_swapped = parse_pairwise_verdict(call_ollama(prompt_swapped, model=model))
+    prompt_swapped = prompt_builder(article, summary_2, summary_1, dimension)
+    verdict_swapped = verdict_parser(call_ollama(prompt_swapped, model=model))
     winner_swapped = resolve_pairwise_winner(verdict_swapped.winner, ("summary_2", "summary_1"))
 
     if winner_original is None or winner_swapped is None:
