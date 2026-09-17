@@ -77,3 +77,52 @@ def test_reason_strings_mention_threshold_and_rate():
     assert "100.0%" in reason
     assert "20%" in reason
 
+from evalcore.judge.bias import combine_three_verdicts, combine_two_orders
+
+
+def test_combine_two_orders_agreement():
+    winner, agree = combine_two_orders("summary_1", "summary_1")
+    assert winner == "summary_1"
+    assert agree is True
+
+
+def test_combine_two_orders_disagreement_is_tie():
+    winner, agree = combine_two_orders("summary_1", "summary_2")
+    assert winner == "tie"
+    assert agree is False
+
+
+def test_combine_two_orders_agree_on_tie():
+    winner, agree = combine_two_orders("tie", "tie")
+    assert winner == "tie"
+    assert agree is True
+
+
+def test_combine_two_orders_none_is_inconclusive():
+    winner, agree = combine_two_orders(None, "summary_1")
+    assert winner is None
+    assert agree is False
+
+
+def test_combine_three_verdicts_majority():
+    winner, unanimous = combine_three_verdicts("summary_1", "summary_2", "summary_1")
+    assert winner == "summary_1"
+    assert unanimous is False
+
+
+def test_combine_three_verdicts_unanimous():
+    winner, unanimous = combine_three_verdicts("summary_2", "summary_2", "summary_2")
+    assert winner == "summary_2"
+    assert unanimous is True
+
+
+def test_combine_three_verdicts_no_majority_is_tie():
+    winner, unanimous = combine_three_verdicts("summary_1", "summary_2", "tie")
+    assert winner == "tie"
+    assert unanimous is False
+
+
+def test_combine_three_verdicts_all_none_is_inconclusive():
+    winner, _unanimous = combine_three_verdicts(None, None, None)
+    assert winner is None
+

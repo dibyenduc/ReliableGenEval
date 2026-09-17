@@ -122,3 +122,83 @@ def summarize_position_bias(results: pd.DataFrame, threshold: float = POSITION_B
         })
     return pd.DataFrame(rows).sort_values("dimension").reset_index(drop=True)
 
+from collections import Counter
+
+
+@dataclass
+class DebiasedVerdict:
+    winner: str | None  # 'summary_1', 'summary_2', 'tie', or None
+    agreement: bool  # True if all calls used agreed without needing a tie-break
+    n_calls: int
+    note: str
+
+
+def combine_two_orders(winner_original: str | None, winner_swapped: str | None) -> tuple[str | None, bool]:
+    """Combine winners from two presentation orders of the same pair.
+
+    Returns (combined_winner, agreement). If either call failed to parse,
+    the combined result is None (inconclusive). If both orders agree on
+    the same content-identity winner (including 'tie'), that's returned
+    with agreement=True. If they disagree, returns ('tie', False) --
+    treating position-dependent flips as inconclusive rather than
+    arbitrarily picking one side.
+    """
+    if winner_original is None or winner_swapped is None:
+        return None, False
+    if winner_original == winner_swapped:
+        return winner_original, True
+    return "tie", False
+
+
+def combine_three_verdicts(v1: str | None, v2: str | None, v3: str | None) -> tuple[str | None, bool]:
+    """Majority vote across three verdicts (used as a tie-break when the
+    first two orders disagree). Returns (winner, unanimous)."""
+    votes = [v for v in (v1, v2, v3) if v is not None]
+    if not votes:
+        return None, False
+    counts = Counter(votes)
+    top_winner, top_count = counts.most_common(1)[0]
+    unanimous = top_count == len(votes) and len(votes) == 3
+    if top_count > len(votes) / 2:
+        return top_winner, unanimous
+    return "tie", False  # no majority -> inconclusive
+
+def run_debiased_pairwise_judge(
+    article: str,
+    summary_1: str,
+    summary_2: str,
+    dimension: str,
+    model: str = "llama3.1:latest",
+    use_tiebreak: bool = True,
+) -> DebiasedVerdict:
+    """Get a position-debiased verdict by running the pairwise judge in
+    both presentation orders and requiring agreement. If the two orders
+    disagree and use_tiebreak=True, runs a third call (original order
+    again) and takes a majority vote across all three.
+    """
+    prompt_original = build_pairwise_prompt(article, summary_1, summary_2, dimension)
+    verdict_original = parse_pairwise_verdict(call_ollama(prompt_original, model=model))
+    winner_original = resolve_pairwise_winner(verdict_original.winner, ("summary_1", "summary_2"))
+
+    prompt_swapped = build_pairwise_prompt(article, summary_2, summary_1, dimension)
+    verdict_swapped = parse_pairwise_verdict(call_ollama(prompt_swapped, model=model))
+    winner_swapped = resolve_pairwise_winner(verdict_swapped.winner, ("summary_2", "summary_1"))
+
+    combined, agreement = combine_two_orders(winner_original, winner_swapped)
+
+    if agreement or not use_tiebreak or combined is None:
+        note = (
+            f"orders agreed on '{combined}'" if agreement
+            else "one or both verdicts failed to parse; inconclusive"
+        )
+        return DebiasedVerdict(winner=combined, agreement=agreement, n_calls=2, note=note)
+
+    verdict_tiebreak = parse_pairwise_verdict(call_ollama(prompt_original, model=model))
+    winner_tiebreak = resolve_pairwise_winner(verdict_tiebreak.winner, ("summary_1", "summary_2"))
+    final, unanimous = combine_three_verdicts(winner_original, winner_swapped, winner_tiebreak)
+    note = (
+        f"orders disagreed ({winner_original} vs {winner_swapped}); tie-break majority: '{final}'"
+        f"{' (unanimous)' if unanimous else ''}"
+    )
+    return DebiasedVerdict(winner=final, agreement=unanimous, n_calls=3, note=note)
+
