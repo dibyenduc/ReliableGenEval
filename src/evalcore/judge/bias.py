@@ -177,21 +177,20 @@ def run_debiased_pairwise_judge(
     model: str = "llama3.1:latest",
     use_tiebreak: bool = True,
     rng_seed: int | None = None,
+    prompt_builder=build_pairwise_prompt,
+    verdict_parser=parse_pairwise_verdict,
 ) -> DebiasedVerdict:
-    """Get a position-debiased verdict by running the pairwise judge in
-    both presentation orders and requiring agreement. If the two orders
-    disagree and use_tiebreak=True, makes a THIRD call with a randomly
-    chosen presentation order (not a repeat of either prior order) and
-    takes a majority vote across all three. Randomizing the tie-break
-    order is essential -- reusing either prior order re-injects the same
-    positional bias into the vote instead of resolving it.
+    """... (same docstring, plus:)
+    prompt_builder/verdict_parser let this be reused with alternative
+    pairwise prompt designs (e.g. chain-of-thought) without duplicating
+    the order-swap/tie-break/majority-vote logic.
     """
-    prompt_original = build_pairwise_prompt(article, summary_1, summary_2, dimension)
-    verdict_original = parse_pairwise_verdict(call_ollama(prompt_original, model=model))
+    prompt_original = prompt_builder(article, summary_1, summary_2, dimension)
+    verdict_original = verdict_parser(call_ollama(prompt_original, model=model))
     winner_original = resolve_pairwise_winner(verdict_original.winner, ("summary_1", "summary_2"))
 
-    prompt_swapped = build_pairwise_prompt(article, summary_2, summary_1, dimension)
-    verdict_swapped = parse_pairwise_verdict(call_ollama(prompt_swapped, model=model))
+    prompt_swapped = prompt_builder(article, summary_2, summary_1, dimension)
+    verdict_swapped = verdict_parser(call_ollama(prompt_swapped, model=model))
     winner_swapped = resolve_pairwise_winner(verdict_swapped.winner, ("summary_2", "summary_1"))
 
     combined, agreement = combine_two_orders(winner_original, winner_swapped)
@@ -212,7 +211,7 @@ def run_debiased_pairwise_judge(
         prompt_tiebreak = prompt_swapped
         tiebreak_order = ("summary_2", "summary_1")
 
-    verdict_tiebreak = parse_pairwise_verdict(call_ollama(prompt_tiebreak, model=model))
+    verdict_tiebreak = verdict_parser(call_ollama(prompt_tiebreak, model=model))
     winner_tiebreak = resolve_pairwise_winner(verdict_tiebreak.winner, tiebreak_order)
 
     final, unanimous = combine_three_verdicts(winner_original, winner_swapped, winner_tiebreak)
