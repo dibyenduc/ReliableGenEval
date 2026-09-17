@@ -14,9 +14,14 @@ from dataclasses import dataclass
 
 SCORE_MIN, SCORE_MAX = 1, 5
 
-POINTWISE_PROMPT_TEMPLATE = """You are evaluating the {dimension} of a summary.
+POINTWISE_PROMPT_TEMPLATE = """You are evaluating ONLY the {dimension} of a summary. Ignore all other qualities.
 
 {dimension_definition}
+
+Important: focus exclusively on {dimension} as defined above. A summary can be \
+excellent in other respects (e.g. well-written, factually accurate) but still \
+score low specifically on {dimension}, and vice versa. Do not let your impression \
+of the summary's other qualities affect this score.
 
 Article:
 {article}
@@ -24,8 +29,8 @@ Article:
 Summary:
 {summary}
 
-Rate the {dimension} of this summary on a scale of 1 to 5, where 1 is very poor \
-and 5 is excellent. Respond with ONLY the integer score, nothing else."""
+Rate ONLY the {dimension} of this summary on a scale of 1 to 5, where 1 is very \
+poor and 5 is excellent. Respond with ONLY the integer score, nothing else."""
 
 DIMENSION_DEFINITIONS = {
     "coherence": "Coherence measures whether the summary is well-structured and "
